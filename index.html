@@ -1,270 +1,1458 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>🔥 Retos Atrevidos</title>
-
-<style>
-body {
-    background:#1e1e1e;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    font-family:'Segoe UI',sans-serif;
-}
-
-.iphone {
-    width:430px;
-    height:932px;
-    background:#fff;
-    border-radius:45px;
-    box-shadow:0 0 40px rgba(0,0,0,.6);
-    overflow:hidden;
-    position:relative;
-}
-
-.notch {
-    width:200px;
-    height:35px;
-    background:#000;
-    border-radius:0 0 20px 20px;
-    margin:auto;
-}
-
-header {
-    background:linear-gradient(135deg,#ff2f6e,#ff6b81);
-    color:#fff;
-    text-align:center;
-    padding:18px;
-    font-size:22px;
-    font-weight:bold;
-}
-
-.screen {
-    padding:20px;
-}
-
-.card {
-    background:#f7f7f7;
-    border-radius:20px;
-    padding:20px;
-    margin-bottom:15px;
-    text-align:center;
-}
-
-.btn {
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:15px;
-    font-size:17px;
-    margin-top:10px;
-    cursor:pointer;
-    color:#fff;
-    background:#ff2f6e;
-}
-
-.btn.shot { background:#2f9e44; }
-.btn.alt { background:#6c63ff; }
-
-.counter {
-    font-size:46px;
-    font-weight:bold;
-    margin:15px 0;
-}
-
-.toggle {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#eee;
-    padding:12px;
-    border-radius:15px;
-    margin-bottom:15px;
-}
-
-footer {
-    position:absolute;
-    bottom:0;
-    width:100%;
-    padding:12px;
-    border-top:1px solid #ddd;
-    background:#fff;
-    text-align:center;
-    font-size:14px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MODO - App de Parejas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f3460">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        body {
+            background: #0a0e17;
+            color: #fff;
+            min-height: 100vh;
+            height: 100%;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Diseño móvil - Contenedor principal */
+        .app-container {
+            max-width: 100%;
+            min-height: 100vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Barra de estado (simulada) */
+        .status-bar {
+            height: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .status-bar i {
+            margin: 0 2px;
+        }
+        
+        /* Header de la app */
+        .app-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .app-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(to right, #ff6b6b, #ffd93d, #6bcf7f, #4d96ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        
+        .app-subtitle {
+            font-size: 0.9rem;
+            color: #a9b7c6;
+            margin-bottom: 5px;
+        }
+        
+        /* Navegación por pestañas */
+        .tabs-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 125px;
+            z-index: 10;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 5px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: #fff;
+            border-bottom: 3px solid #4d96ff;
+        }
+        
+        .tab i {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+        
+        /* Contenido principal */
+        .main-content {
+            flex: 1;
+            padding: 20px 15px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Modos de juego - Vista de cards */
+        .modes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .mode-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 22px 20px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        .mode-card:active {
+            transform: scale(0.98);
+        }
+        
+        .mode-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .mode-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.6rem;
+        }
+        
+        .mode-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        
+        .mode-status {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+        }
+        
+        .mode-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #cdd9e5;
+            margin-bottom: 20px;
+        }
+        
+        .mode-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .mode-button i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .mode-button:active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Colores específicos para cada modo */
+        .suave {
+            border-left: 5px solid #2ecc71;
+        }
+        
+        .suave .mode-icon {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+        }
+        
+        .suave .mode-button {
+            background: rgba(46, 204, 113, 0.2);
+        }
+        
+        .suave .mode-button:active {
+            background: rgba(46, 204, 113, 0.3);
+        }
+        
+        .sexy {
+            border-left: 5px solid #9b59b6;
+        }
+        
+        .sexy .mode-icon {
+            background: rgba(155, 89, 182, 0.15);
+            color: #9b59b6;
+        }
+        
+        .sexy .mode-button {
+            background: rgba(155, 89, 182, 0.2);
+        }
+        
+        .sexy .mode-button:active {
+            background: rgba(155, 89, 182, 0.3);
+        }
+        
+        .caliente {
+            border-left: 5px solid #e67e22;
+        }
+        
+        .caliente .mode-icon {
+            background: rgba(230, 126, 34, 0.15);
+            color: #e67e22;
+        }
+        
+        .caliente .mode-button {
+            background: rgba(230, 126, 34, 0.2);
+        }
+        
+        .caliente .mode-button:active {
+            background: rgba(230, 126, 34, 0.3);
+        }
+        
+        .extremo {
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .extremo .mode-icon {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+        }
+        
+        .extremo .mode-button {
+            background: rgba(231, 76, 60, 0.2);
+        }
+        
+        .extremo .mode-button:active {
+            background: rgba(231, 76, 60, 0.3);
+        }
+        
+        .aleatorio {
+            border-left: 5px solid #3498db;
+        }
+        
+        .aleatorio .mode-icon {
+            background: rgba(52, 152, 219, 0.15);
+            color: #3498db;
+        }
+        
+        .aleatorio .mode-button {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        
+        .aleatorio .mode-button:active {
+            background: rgba(52, 152, 219, 0.3);
+        }
+        
+        /* Pantalla de reto - Vista modal */
+        .challenge-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 23, 0.95);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .challenge-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .challenge-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+        
+        .challenge-modal.active .challenge-card {
+            transform: translateY(0);
+        }
+        
+        .challenge-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .challenge-mode {
+            display: flex;
+            align-items: center;
+        }
+        
+        .challenge-mode-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .challenge-mode-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .close-modal {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .challenge-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .challenge-text {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        
+        .challenge-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .challenge-action-button {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+        
+        .challenge-action-button:active {
+            transform: scale(0.95);
+        }
+        
+        .new-challenge-btn {
+            background: linear-gradient(to right, #6bcf7f, #4d96ff);
+            color: white;
+        }
+        
+        .finish-challenge-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        /* Modal de Verdad o Reto */
+        .truth-dare-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 23, 0.95);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .truth-dare-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .truth-dare-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+        
+        .truth-dare-modal.active .truth-dare-card {
+            transform: translateY(0);
+        }
+        
+        .truth-dare-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        .truth-dare-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .truth-dare-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .truth-dare-option:active {
+            transform: scale(0.97);
+        }
+        
+        .truth-option {
+            background: rgba(46, 204, 113, 0.15);
+            border-color: rgba(46, 204, 113, 0.3);
+        }
+        
+        .truth-option:active {
+            background: rgba(46, 204, 113, 0.25);
+        }
+        
+        .dare-option {
+            background: rgba(231, 76, 60, 0.15);
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+        
+        .dare-option:active {
+            background: rgba(231, 76, 60, 0.25);
+        }
+        
+        .shot-option {
+            background: rgba(155, 89, 182, 0.15);
+            border-color: rgba(155, 89, 182, 0.3);
+        }
+        
+        .shot-option:active {
+            background: rgba(155, 89, 182, 0.25);
+        }
+        
+        .truth-dare-content {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .truth-dare-text {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        
+        /* Footer de la app */
+        .app-footer {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6c757d;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        
+        /* Pestaña de Configuración */
+        .settings-content {
+            display: none;
+            padding: 20px 0;
+        }
+        
+        .settings-content.active {
+            display: block;
+        }
+        
+        .settings-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .settings-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #4d96ff;
+            display: flex;
+            align-items: center;
+        }
+        
+        .settings-title i {
+            margin-right: 10px;
+        }
+        
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-label {
+            font-size: 1rem;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #4d96ff;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        /* Ajustes para pantallas más grandes */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 500px;
+                margin: 0 auto;
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+                min-height: 100vh;
+                position: relative;
+            }
+            
+            body {
+                background: #0a0e17;
+                padding: 20px 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+        }
+    </style>
 </head>
-
 <body>
-
-<div class="iphone">
-    <div class="notch"></div>
-    <header>🔥 Retos Atrevidos</header>
-
-    <div class="screen">
-
-        <div class="toggle">
-            <span>🥃 Modo Fiesta</span>
-            <input type="checkbox" id="modoFiesta" checked>
+    <div class="app-container">
+        <!-- Barra de estado simulada -->
+        <div class="status-bar">
+            <div>9:41</div>
+            <div>
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-three-quarters"></i>
+            </div>
         </div>
-
-        <div class="card">
-            <p><b>🔥 Intensidad:</b> <span id="nivel">1</span></p>
-            <p><b>📜 Retos completados:</b> <span id="total">0</span></p>
+        
+        <!-- Header de la app -->
+        <header class="app-header">
+            <h1 class="app-title">MODO</h1>
+            <p class="app-subtitle">Juego de parejas - Todos los modos desbloqueados</p>
+        </header>
+        
+        <!-- Navegación por pestañas -->
+        <div class="tabs-container">
+            <div class="tab active" data-tab="modes">
+                <i class="fas fa-gamepad"></i>
+                <span>Modos</span>
+            </div>
+            <div class="tab" data-tab="settings">
+                <i class="fas fa-cog"></i>
+                <span>Ajustes</span>
+            </div>
         </div>
-
-        <button class="btn" onclick="retoAtrevido()">🔥 Reto Atrevido</button>
-        <button class="btn shot" onclick="retoShot()">🥃 Reto con Shot</button>
-
-        <div class="card" id="retoCard">
-            <p>Presiona un botón para empezar 😈</p>
+        
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Sección de modos de juego -->
+            <div id="modes-content" class="tab-content active">
+                <div class="modes-grid">
+                    <!-- Modo SUAVE -->
+                    <div class="mode-card suave">
+                        <div class="mode-card-header">
+                            <div class="mode-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div>
+                                <h2 class="mode-title">SUAVE</h2>
+                                <span class="mode-status">Desbloqueado</span>
+                            </div>
+                        </div>
+                        <p class="mode-description">Para conocer a tu pareja, comienza con verdades o retos suaves.</p>
+                        <button class="mode-button" data-mode="suave">
+                            <i class="fas fa-play-circle"></i> Jugar ahora
+                        </button>
+                    </div>
+                    
+                    <!-- Modo SEXY -->
+                    <div class="mode-card sexy">
+                        <div class="mode-card-header">
+                            <div class="mode-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div>
+                                <h2 class="mode-title">SEXY</h2>
+                                <span class="mode-status">Desbloqueado</span>
+                            </div>
+                        </div>
+                        <p class="mode-description">Anima el juego. ¿Están listos para conocerse un poco más?</p>
+                        <button class="mode-button" data-mode="sexy">
+                            <i class="fas fa-play-circle"></i> Jugar ahora
+                        </button>
+                    </div>
+                    
+                    <!-- Modo CALIENTE -->
+                    <div class="mode-card caliente">
+                        <div class="mode-card-header">
+                            <div class="mode-icon">
+                                <i class="fas fa-pepper-hot"></i>
+                            </div>
+                            <div>
+                                <h2 class="mode-title">CALIENTE</h2>
+                                <span class="mode-status">Desbloqueado</span>
+                            </div>
+                        </div>
+                        <p class="mode-description">Es hora de hacer travesuras. Prepárense para revelar su mejor parte.</p>
+                        <button class="mode-button" data-mode="caliente">
+                            <i class="fas fa-play-circle"></i> Jugar ahora
+                        </button>
+                    </div>
+                    
+                    <!-- Modo EXTREMO -->
+                    <div class="mode-card extremo">
+                        <div class="mode-card-header">
+                            <div class="mode-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div>
+                                <h2 class="mode-title">EXTREMO</h2>
+                                <span class="mode-status">Desbloqueado</span>
+                            </div>
+                        </div>
+                        <p class="mode-description">Sobrepasa tus límites y pasarán un increíble momento juntos.</p>
+                        <button class="mode-button" data-mode="extremo">
+                            <i class="fas fa-play-circle"></i> Jugar ahora
+                        </button>
+                    </div>
+                    
+                    <!-- Modo ALEATORIO -->
+                    <div class="mode-card aleatorio">
+                        <div class="mode-card-header">
+                            <div class="mode-icon">
+                                <i class="fas fa-random"></i>
+                            </div>
+                            <div>
+                                <h2 class="mode-title">ALEATORIO</h2>
+                                <span class="mode-status">Desbloqueado</span>
+                            </div>
+                        </div>
+                        <p class="mode-description">Retos aleatorios para cada modo de juego. ¡Más diversión más amor!</p>
+                        <button class="mode-button" data-mode="aleatorio">
+                            <i class="fas fa-play-circle"></i> Jugar ahora
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="app-info">
+                    <p style="text-align: center; color: #6c757d; font-size: 0.9rem; margin-top: 20px;">
+                        Selecciona un modo para comenzar el juego. Todos los modos están desbloqueados.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Sección de ajustes -->
+            <div id="settings-content" class="tab-content settings-content">
+                <div class="settings-section">
+                    <h3 class="settings-title"><i class="fas fa-sliders-h"></i> Preferencias del Juego</h3>
+                    
+                    <div class="settings-item">
+                        <span class="settings-label">Efectos de sonido</span>
+                        <label class="switch">
+                            <input type="checkbox" id="sound-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <span class="settings-label">Vibración</span>
+                        <label class="switch">
+                            <input type="checkbox" id="vibration-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <span class="settings-label">Modo oscuro siempre</span>
+                        <label class="switch">
+                            <input type="checkbox" id="dark-mode-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-title"><i class="fas fa-user-friends"></i> Configuración de Pareja</h3>
+                    
+                    <div class="settings-item">
+                        <span class="settings-label">Nombres personalizados</span>
+                        <button class="mode-button" id="edit-names-btn" style="padding: 8px 15px; width: auto;">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <span class="settings-label">Temporizador de retos</span>
+                        <label class="switch">
+                            <input type="checkbox" id="timer-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-title"><i class="fas fa-info-circle"></i> Acerca de MODO</h3>
+                    
+                    <div class="settings-item">
+                        <span class="settings-label">Versión</span>
+                        <span class="settings-label">1.0.0</span>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <span class="settings-label">Desarrollador</span>
+                        <span class="settings-label">Equipo MODO</span>
+                    </div>
+                    
+                    <button class="mode-button" id="reset-app-btn" style="margin-top: 15px; background: rgba(231, 76, 60, 0.2);">
+                        <i class="fas fa-redo-alt"></i> Restablecer juego
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer de la app -->
+        <footer class="app-footer">
+            <p>MODO - Juego para parejas © 2023</p>
+            <p style="font-size: 0.7rem; margin-top: 5px;">Diviértanse con responsabilidad</p>
+        </footer>
+        
+        <!-- Modal de reto -->
+        <div class="challenge-modal" id="challengeModal">
+            <div class="challenge-card">
+                <div class="challenge-header">
+                    <div class="challenge-mode">
+                        <div class="challenge-mode-icon" id="challengeModeIcon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div>
+                            <div class="challenge-mode-title" id="challengeModeTitle">SUAVE</div>
+                            <div style="font-size: 0.8rem; color: #a9b7c6;">Reto activo</div>
+                        </div>
+                    </div>
+                    <button class="close-modal" id="closeModalBtn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="challenge-content">
+                    <div class="challenge-text" id="challengeText">
+                        Haz clic en "Nuevo Reto" para comenzar
+                    </div>
+                </div>
+                
+                <div class="challenge-actions">
+                    <button class="challenge-action-button new-challenge-btn" id="newChallengeBtn">
+                        <i class="fas fa-redo-alt"></i> Nuevo Reto
+                    </button>
+                    <button class="challenge-action-button finish-challenge-btn" id="finishChallengeBtn">
+                        <i class="fas fa-check"></i> Completado
+                    </button>
+                </div>
+            </div>
         </div>
-
-        <div class="card">
-            <h4>📜 Historial</h4>
-            <div id="historial" style="font-size:13px;max-height:120px;overflow:auto;"></div>
+        
+        <!-- Modal de Verdad o Reto -->
+        <div class="truth-dare-modal" id="truthDareModal">
+            <div class="truth-dare-card">
+                <h2 class="truth-dare-title" id="truthDareTitle">VERDAD O RETO</h2>
+                
+                <div class="truth-dare-content">
+                    <div class="truth-dare-text" id="truthDareText">
+                        Elige una opción para comenzar
+                    </div>
+                </div>
+                
+                <div class="truth-dare-options" id="truthDareOptions">
+                    <div class="truth-dare-option truth-option" data-choice="truth">
+                        <i class="fas fa-comment-alt"></i> VERDAD
+                    </div>
+                    <div class="truth-dare-option dare-option" data-choice="dare">
+                        <i class="fas fa-bolt"></i> RETO
+                    </div>
+                    <div class="truth-dare-option shot-option" data-choice="shot">
+                        <i class="fas fa-glass-cheers"></i> TOMAR UN SHOT
+                    </div>
+                </div>
+                
+                <div class="challenge-actions">
+                    <button class="challenge-action-button new-challenge-btn" id="newTruthDareBtn">
+                        <i class="fas fa-redo-alt"></i> Nuevo
+                    </button>
+                    <button class="challenge-action-button finish-challenge-btn" id="closeTruthDareBtn">
+                        <i class="fas fa-times"></i> Cerrar
+                    </button>
+                </div>
+            </div>
         </div>
-
     </div>
 
-    <footer>
-        Intensidad sube automáticamente 🔥
-    </footer>
-</div>
+    <script>
+        // Base de datos ampliada de retos para cada modo
+        const challenges = {
+            suave: [
+                "Cuenta algo que te haya hecho sonreír hoy.",
+                "Dile a tu pareja qué es lo primero que te llamó la atención de ella/él.",
+                "Comparte un sueño o meta que tengas para el futuro.",
+                "Habla sobre tu primer encuentro o cita juntos.",
+                "Comparte una canción que te recuerde a tu pareja y explica por qué.",
+                "Di algo que admiras de tu pareja.",
+                "Cuenta un momento embarazoso que hayas tenido.",
+                "Comparte tu comida favorita y por qué te gusta.",
+                "Habla de un lugar que te gustaría visitar juntos.",
+                "Dile a tu pareja algo por lo que estés agradecido/a hoy."
+            ],
+            sexy: [
+                "Describe lo que más te atrae físicamente de tu pareja.",
+                "Besa a tu pareja en el cuello durante 10 segundos.",
+                "Susurra al oído de tu pareja algo que te gustaría hacer juntos.",
+                "Dile a tu pareja qué es lo más sexy que hace sin darse cuenta.",
+                "Jueguen a mirarse a los ojos por un minuto sin hablar.",
+                "Dale un masaje de 2 minutos en los hombros a tu pareja.",
+                "Cuenta una fantasía romántica que tengas.",
+                "Baila lentamente con tu pareja por una canción completa.",
+                "Dile a tu pareja qué posesión tuya le regalarías y por qué.",
+                "Describe el momento en que te diste cuenta que te gustaba tu pareja.",
+                "Tapa los ojos de tu pareja y dale un beso donde tú quieras.",
+                "Baila muy pegado a tu pareja, uno por detrás y otro mirándose a los ojos.",
+                "Perrea suavemente contra tu pareja por 30 segundos.",
+                "Acaricia el cabello de tu pareja mientras le susurras algo lindo al oído.",
+                "Jueguen a intercambiar una prenda de ropa por el resto del juego."
+            ],
+            caliente: [
+                "Da un beso apasionado a tu pareja durante 15 segundos.",
+                "Quítate una prenda de ropa (¡sé creativo/a!).",
+                "Dile a tu pareja qué te excita más de ella/él.",
+                "Acaricia suavemente el brazo de tu pareja mientras le susurras algo atrevido.",
+                "Describe un momento íntimo que hayan compartido que nunca olvidarás.",
+                "Jueguen a intercambiar una prenda de ropa por el resto del juego.",
+                "Besa a tu pareja en un lugar inesperado (pero apropiado).",
+                "Hablen sobre algo nuevo que les gustaría probar juntos.",
+                "Dale un masaje en las manos a tu pareja durante 3 minutos.",
+                "Tapa los ojos de tu pareja y haz que adivine qué objeto está tocando.",
+                "Perrea sensualmente contra tu pareja durante una canción completa.",
+                "Baila pegado a tu pareja de espaldas, moviendo tus caderas contra las suyas.",
+                "Dale un beso en cada uno de los nudillos de la mano a tu pareja.",
+                "Susurra al oído de tu pareja qué parte de su cuerpo te gusta más.",
+                "Jueguen a 'Verdad o Reto' pero solo con opciones atrevidas."
+            ],
+            extremo: [
+                "Quítense una prenda de ropa simultáneamente.",
+                "Bésense apasionadamente durante 30 segundos sin parar.",
+                "Tomen una selfie juntos en una pose atrevida (¡solo para ustedes!).",
+                "Jueguen a hacer striptease lento por 60 segundos (cada uno).",
+                "Dense un masaje mutuo en la espalda durante 5 minutos.",
+                "Cuenten su fantasía más íntima (si se sienten cómodos).",
+                "Jueguen a '7 minutos en el cielo' - abrácense en un espacio cerrado.",
+                "Hagan un baile sensual para su pareja por una canción.",
+                "Prueben un beso en un lugar que nunca hayan besado antes.",
+                "Jueguen a ciegas - uno con los ojos vendados, el otro lo guía con palabras.",
+                "Tapa los ojos de tu pareja y hazle probar tres alimentos distintos para que adivine cuáles son.",
+                "Perrea extremadamente pegado a tu pareja sin espacio entre ustedes.",
+                "Baila con tu pareja como si estuvieran haciendo el amor verticalmente.",
+                "Tomen un shot juntos directamente de la boca del otro (con bebida no alcohólica si prefieren).",
+                "Hagan un reto de resistencia: quién aguanta más tiempo besando al otro."
+            ],
+            aleatorio: [
+                "Elija un modo al azar y complete su reto.",
+                "Tire un dado virtual: 1-2: SUAVE, 3-4: SEXY, 5-6: CALIENTE",
+                "Cierre los ojos y señale un modo en la pantalla. ¡Ese es su reto!",
+                "Deje que su pareja elija el modo para usted.",
+                "Combine dos modos: haga la primera mitad de un reto SUAVE y la segunda de uno CALIENTE.",
+                "Elija un número del 1 al 5 para seleccionar el modo (1=SUAVE, 5=EXTREMO).",
+                "Cambien de modo después de cada reto completado.",
+                "Hagan una ronda rápida: un reto de cada modo en orden.",
+                "Déjense sorprender: el sistema elegirá un modo y reto aleatorio.",
+                "Creen su propio reto combinando elementos de diferentes modos.",
+                "Jueguen a 'Verdad o Reto' con una vuelta de tuerca: cada uno elige para el otro.",
+                "Tomen un shot cada vez que fallen un reto de adivinanzas con los ojos vendados.",
+                "Alternen entre perrear y bailar pegados cada 30 segundos.",
+                "Hagan una competencia: quién da el beso más creativo con los ojos vendados.",
+                "Jueguen al 'reto encadenado': cada reto completado lleva a uno más intenso."
+            ]
+        };
 
-<script>
-// ================= VOZ =================
-function hablar(texto){
-    speechSynthesis.cancel();
-    const voz=new SpeechSynthesisUtterance(texto);
-    voz.lang="es-ES";
-    speechSynthesis.speak(voz);
-}
+        // Base de datos de Verdades
+        const truths = [
+            "¿Cuál ha sido tu fantasía más recurrente?",
+            "¿Qué es lo más atrevido que has hecho por amor?",
+            "¿Alguna vez has tenido un sueño erótico conmigo?",
+            "¿Qué parte de mi cuerpo te vuelve loco/a?",
+            "¿Cuál es tu posición favorita?",
+            "¿Alguna vez te has excitado en un lugar público?",
+            "¿Qué es lo más sensual que alguien te ha dicho?",
+            "¿Prefieres ser dominante o sumiso/a?",
+            "¿Qué te gustaría que hiciera y nunca me he atrevido?",
+            "¿Cuál ha sido tu experiencia sexual más memorable?",
+            "¿Te gusta cuando tomo la iniciativa o prefieres llevarme?",
+            "¿Alguna vez has fingido un orgasmo conmigo?",
+            "¿Qué es lo que más te excita de nuestra intimidad?",
+            "¿Has tenido pensamientos impuros sobre alguno de mis amigos?",
+            "¿Qué es lo más atrevido que te gustaría hacer conmigo?"
+        ];
 
-// ================= VIBRACIÓN =================
-function vibrar(ms=200){
-    if(navigator.vibrate) navigator.vibrate(ms);
-}
+        // Base de datos de Retos especiales para "Verdad o Reto"
+        const dares = [
+            "Bésame como si fuera nuestra primera vez.",
+            "Quítate una prenda de ropa usando solo una mano.",
+            "Dame un masaje en los pies durante 2 minutos.",
+            "Baila para mí como si estuviéramos en un club privado.",
+            "Susurra en mi oído lo que te gustaría hacerme ahora mismo.",
+            "Déjame desabrochar 3 botones de tu ropa (o equivalente).",
+            "Siéntate en mi regazo y dame un beso apasionado.",
+            "Deja que te ate los ojos y te guíe por la habitación.",
+            "Juguemos a las escondidas íntimas: esconde algo personal y déjame buscarlo.",
+            "Escribe con tu dedo en mi espalda lo que deseas y déjame adivinar.",
+            "Dame un lap dance por 30 segundos.",
+            "Juega a ser mi sirviente/a por los próximos 5 minutos.",
+            "Deja que te dé un beso donde yo quiera (dentro de lo razonable).",
+            "Dime tu mayor secreto sexual mientras te acaricio la cara.",
+            "Permíteme dibujar algo en tu piel con mi dedo mojado."
+        ];
 
-// ================= DATOS =================
-let historial=[];
-let completados=0;
-let intensidad=1;
-let recientes=[];
-
-const retosAtrevidos=[
-"Besa intensamente por 15 segundos",
-"Perrea muy pegado durante 20 segundos",
-"Ojos vendados: recibe un beso donde quiera tu pareja",
-"Baila sensual frente a tu pareja",
-"Beso sin manos por 10 segundos",
-"Perreo por detrás intenso",
-"Ojos vendados: adivina si fue beso o caricia",
-"Beso largo sin hablar después",
-"Baila lento muy pegado",
-"Perreo subiendo intensidad"
-];
-
-const retosShot=[
-"Shot o beso intenso",
-"Shot o perreo por 15 segundos",
-"Shot o ojos vendados + beso sorpresa",
-"Shot o baile sensual",
-"Shot o beso sin manos"
-];
-
-// ================= UTIL =================
-function obtenerReto(lista){
-    let i;
-    do {
-        i=Math.floor(Math.random()*lista.length);
-    } while(recientes.includes(i));
-
-    recientes.push(i);
-    if(recientes.length>3) recientes.shift();
-    return lista[i];
-}
-
-function actualizarStats(){
-    document.getElementById("nivel").innerText=intensidad;
-    document.getElementById("total").innerText=completados;
-}
-
-function guardarHistorial(texto){
-    historial.unshift(texto);
-    document.getElementById("historial").innerHTML=historial.slice(0,10).join("<br>");
-}
-
-// ================= CONTADOR =================
-function contador(segundos){
-    let s=segundos;
-    hablar(`Comienza. ${segundos} segundos`);
-    vibrar();
-
-    const card=document.getElementById("retoCard");
-    const inter=setInterval(()=>{
-        card.innerHTML=`<h3>⏱️</h3><div class="counter">${s}</div>`;
-        hablar(s.toString());
-        s--;
-
-        if(s<0){
-            clearInterval(inter);
-            completados++;
-            if(completados%3===0) intensidad++;
-            actualizarStats();
-            card.innerHTML="<h3>✅ Reto completado</h3>";
-            hablar("Reto completado");
-            vibrar(400);
+        // Configuración de iconos por modo
+        const modeIcons = {
+            suave: "fas fa-heart",
+            sexy: "fas fa-fire",
+            caliente: "fas fa-pepper-hot",
+            extremo: "fas fa-bolt",
+            aleatorio: "fas fa-random"
+        };
+        
+        // Variables de estado
+        let currentMode = 'suave';
+        let soundEnabled = true;
+        let vibrationEnabled = true;
+        let inTruthDareMode = false;
+        
+        // Referencias a elementos del DOM
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const modeButtons = document.querySelectorAll('.mode-button');
+        const challengeModal = document.getElementById('challengeModal');
+        const truthDareModal = document.getElementById('truthDareModal');
+        const challengeModeTitle = document.getElementById('challengeModeTitle');
+        const challengeModeIcon = document.getElementById('challengeModeIcon');
+        const challengeText = document.getElementById('challengeText');
+        const truthDareText = document.getElementById('truthDareText');
+        const truthDareTitle = document.getElementById('truthDareTitle');
+        const truthDareOptions = document.getElementById('truthDareOptions');
+        const newChallengeBtn = document.getElementById('newChallengeBtn');
+        const finishChallengeBtn = document.getElementById('finishChallengeBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const newTruthDareBtn = document.getElementById('newTruthDareBtn');
+        const closeTruthDareBtn = document.getElementById('closeTruthDareBtn');
+        const soundToggle = document.getElementById('sound-toggle');
+        const vibrationToggle = document.getElementById('vibration-toggle');
+        const resetAppBtn = document.getElementById('reset-app-btn');
+        const editNamesBtn = document.getElementById('edit-names-btn');
+        
+        // Función para cambiar entre pestañas
+        function switchTab(tabName) {
+            // Actualizar pestañas activas
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Actualizar contenido activo
+            tabContents.forEach(content => {
+                if (content.id === `${tabName}-content`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // Reproducir sonido si está habilitado
+            if (soundEnabled) playTabSwitchSound();
         }
-    },1000);
-}
+        
+        // Función para obtener un reto aleatorio
+        function getRandomChallenge(mode) {
+            const modeChallenges = challenges[mode];
+            const randomIndex = Math.floor(Math.random() * modeChallenges.length);
+            return modeChallenges[randomIndex];
+        }
 
-// ================= RETOS =================
-function retoAtrevido(){
-    const texto=obtenerReto(retosAtrevidos);
-    guardarHistorial("🔥 "+texto);
-    hablar(texto);
+        // Función para obtener una verdad aleatoria
+        function getRandomTruth() {
+            const randomIndex = Math.floor(Math.random() * truths.length);
+            return truths[randomIndex];
+        }
 
-    document.getElementById("retoCard").innerHTML=`
-        <h3>🔥 Reto</h3>
-        <p>${texto}</p>
-        <button class="btn" onclick="contador(${10+intensidad*2})">▶ Iniciar</button>
-    `;
-}
+        // Función para obtener un reto especial aleatorio
+        function getRandomDare() {
+            const randomIndex = Math.floor(Math.random() * dares.length);
+            return dares[randomIndex];
+        }
+        
+        // Función para mostrar el modal de reto
+        function showChallengeModal(mode) {
+            currentMode = mode;
+            inTruthDareMode = false;
+            
+            // Actualizar el título y icono del modo
+            const modeTitles = {
+                suave: 'SUAVE',
+                sexy: 'SEXY',
+                caliente: 'CALIENTE',
+                extremo: 'EXTREMO',
+                aleatorio: 'ALEATORIO'
+            };
+            
+            challengeModeTitle.textContent = modeTitles[mode];
+            
+            // Actualizar el icono del modo
+            challengeModeIcon.innerHTML = `<i class="${modeIcons[mode]}"></i>`;
+            
+            // Obtener y mostrar un reto aleatorio
+            const challenge = getRandomChallenge(mode);
+            challengeText.textContent = challenge;
+            
+            // Mostrar el modal
+            challengeModal.classList.add('active');
+            
+            // Aplicar vibración si está habilitada
+            if (vibrationEnabled) vibrate(50);
+            
+            // Reproducir sonido si está habilitado
+            if (soundEnabled) playChallengeSound();
+        }
 
-function retoShot(){
-    if(!document.getElementById("modoFiesta").checked){
-        alert("Modo fiesta desactivado");
-        return;
-    }
+        // Función para mostrar el modal de Verdad o Reto
+        function showTruthDareModal() {
+            inTruthDareMode = true;
+            
+            // Mostrar el modal
+            truthDareModal.classList.add('active');
+            
+            // Reiniciar el texto
+            truthDareText.textContent = "Elige una opción para comenzar";
+            truthDareTitle.textContent = "VERDAD O RETO";
+            
+            // Mostrar las opciones
+            truthDareOptions.style.display = 'flex';
+            
+            // Aplicar vibración si está habilitada
+            if (vibrationEnabled) vibrate(50);
+            
+            // Reproducir sonido si está habilitado
+            if (soundEnabled) playChallengeSound();
+        }
+        
+        // Función para cerrar el modal de reto
+        function closeChallengeModal() {
+            challengeModal.classList.remove('active');
+            if (soundEnabled) playCloseSound();
+        }
 
-    const texto=obtenerReto(retosShot);
-    guardarHistorial("🥃 "+texto);
-    hablar(texto);
+        // Función para cerrar el modal de Verdad o Reto
+        function closeTruthDareModal() {
+            truthDareModal.classList.remove('active');
+            if (soundEnabled) playCloseSound();
+        }
+        
+        // Función para generar un nuevo reto
+        function generateNewChallenge() {
+            if (inTruthDareMode) {
+                // Si estamos en modo Verdad o Reto, mostrar las opciones otra vez
+                truthDareText.textContent = "Elige una opción para comenzar";
+                truthDareTitle.textContent = "VERDAD O RETO";
+                truthDareOptions.style.display = 'flex';
+            } else {
+                const challenge = getRandomChallenge(currentMode);
+                challengeText.textContent = challenge;
+                
+                // Aplicar animación
+                challengeText.style.opacity = '0.5';
+                setTimeout(() => {
+                    challengeText.style.opacity = '1';
+                }, 200);
+                
+                // Aplicar vibración si está habilitada
+                if (vibrationEnabled) vibrate(30);
+                
+                // Reproducir sonido si está habilitado
+                if (soundEnabled) playNewChallengeSound();
+            }
+        }
 
-    document.getElementById("retoCard").innerHTML=`
-        <h3>🥃 Shot</h3>
-        <p>${texto}</p>
-        <button class="btn shot" onclick="shot()">🥃 Shot</button>
-        <button class="btn" onclick="contador(10)">💋 Beso</button>
-    `;
-}
+        // Función para manejar la selección de Verdad o Reto
+        function handleTruthDareChoice(choice) {
+            // Ocultar las opciones
+            truthDareOptions.style.display = 'none';
+            
+            // Mostrar el contenido según la elección
+            if (choice === 'truth') {
+                const truth = getRandomTruth();
+                truthDareText.textContent = truth;
+                truthDareTitle.textContent = "VERDAD";
+            } else if (choice === 'dare') {
+                const dare = getRandomDare();
+                truthDareText.textContent = dare;
+                truthDareTitle.textContent = "RETO";
+            } else if (choice === 'shot') {
+                truthDareText.textContent = "¡Tomen un shot juntos! 🥃\n\nPuede ser de su bebida favorita, o si no beben alcohol, un shot de jugo o agua.";
+                truthDareTitle.textContent = "SHOT TIME";
+            }
+            
+            // Aplicar vibración si está habilitada
+            if (vibrationEnabled) vibrate(30);
+            
+            // Reproducir sonido si está habilitado
+            if (soundEnabled) playNewChallengeSound();
+        }
+        
+        // Función para marcar reto como completado
+        function completeChallenge() {
+            if (inTruthDareMode) {
+                // Animación de completado para Verdad o Reto
+                truthDareText.innerHTML = `<i class="fas fa-check-circle" style="color:#2ecc71; font-size: 2rem; margin-bottom: 10px;"></i><br>¡Completado!`;
+                
+                // Aplicar vibración si está habilitada
+                if (vibrationEnabled) vibrate([100, 50, 100]);
+                
+                // Reproducir sonido si está habilitado
+                if (soundEnabled) playCompleteSound();
+                
+                // Generar nuevo Verdad o Reto después de 2 segundos
+                setTimeout(() => {
+                    showTruthDareModal();
+                }, 2000);
+            } else {
+                // Animación de completado para retos normales
+                challengeText.innerHTML = `<i class="fas fa-check-circle" style="color:#2ecc71; font-size: 2rem; margin-bottom: 10px;"></i><br>¡Reto completado!`;
+                
+                // Aplicar vibración si está habilitada
+                if (vibrationEnabled) vibrate([100, 50, 100]);
+                
+                // Reproducir sonido si está habilitado
+                if (soundEnabled) playCompleteSound();
+                
+                // Generar nuevo reto después de 2 segundos
+                setTimeout(() => {
+                    generateNewChallenge();
+                }, 2000);
+            }
+        }
+        
+        // Función para simular vibración (en dispositivos reales usaría la API de vibración)
+        function vibrate(pattern) {
+            // En un entorno real usaríamos: navigator.vibrate(pattern);
+            // Para esta demo, solo simulamos la funcionalidad
+            console.log("Vibración simulada:", pattern);
+        }
+        
+        // Funciones para sonidos simulados
+        function playTabSwitchSound() {
+            // En una app real, aquí cargaríamos y reproduciríamos un sonido
+            console.log("Sonido de cambio de pestaña reproducido");
+        }
+        
+        function playChallengeSound() {
+            console.log("Sonido de reto reproducido");
+        }
+        
+        function playCloseSound() {
+            console.log("Sonido de cierre reproducido");
+        }
+        
+        function playNewChallengeSound() {
+            console.log("Sonido de nuevo reto reproducido");
+        }
+        
+        function playCompleteSound() {
+            console.log("Sonido de completado reproducido");
+        }
+        
+        // Función para restablecer la app
+        function resetApp() {
+            if (confirm("¿Estás seguro de que quieres restablecer el juego? Esto no afectará los retos, solo las configuraciones.")) {
+                // Restablecer configuraciones
+                soundToggle.checked = true;
+                vibrationToggle.checked = true;
+                soundEnabled = true;
+                vibrationEnabled = true;
+                
+                // Mostrar confirmación
+                alert("La aplicación ha sido restablecida.");
+                
+                // Aplicar vibración si está habilitada
+                if (vibrationEnabled) vibrate(100);
+            }
+        }
+        
+        // Función para editar nombres
+        function editNames() {
+            const name1 = prompt("Nombre de la primera persona:", "Jugador 1");
+            const name2 = prompt("Nombre de la segunda persona:", "Jugador 2");
+            
+            if (name1 && name2) {
+                localStorage.setItem('modo_player1', name1);
+                localStorage.setItem('modo_player2', name2);
+                alert(`Nombres guardados: ${name1} y ${name2}`);
+            }
+        }
 
-function shot(){
-    completados++;
-    if(completados%3===0) intensidad++;
-    actualizarStats();
-    hablar("Shot bebido. Reto completado");
-    vibrar(500);
+        // Función para manejar el clic en los botones de modo
+        function handleModeButtonClick(event) {
+            const mode = event.currentTarget.getAttribute('data-mode');
+            
+            // Para modos sexy, caliente, extremo y aleatorio, mostrar opción de Verdad o Reto
+            if (mode === 'sexy' || mode === 'caliente' || mode === 'extremo' || mode === 'aleatorio') {
+                // Preguntar si quieren jugar Verdad o Reto
+                if (confirm("¿Quieres jugar 'Verdad o Reto' en este modo?")) {
+                    showTruthDareModal();
+                } else {
+                    showChallengeModal(mode);
+                }
+            } else {
+                showChallengeModal(mode);
+            }
+        }
+        
+        // Asignar eventos a las pestañas
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+        
+        // Asignar eventos a los botones de modo
+        modeButtons.forEach(button => {
+            button.addEventListener('click', handleModeButtonClick);
+        });
+        
+        // Asignar eventos a los botones del modal de reto
+        newChallengeBtn.addEventListener('click', generateNewChallenge);
+        finishChallengeBtn.addEventListener('click', completeChallenge);
+        closeModalBtn.addEventListener('click', closeChallengeModal);
+        
+        // Asignar eventos a los botones del modal de Verdad o Reto
+        newTruthDareBtn.addEventListener('click', generateNewChallenge);
+        closeTruthDareBtn.addEventListener('click', closeTruthDareModal);
+        
+        // Asignar eventos a las opciones de Verdad o Reto
+        document.querySelectorAll('.truth-dare-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const choice = this.getAttribute('data-choice');
+                handleTruthDareChoice(choice);
+            });
+        });
+        
+        // Cerrar modales al hacer clic fuera del contenido
+        challengeModal.addEventListener('click', (e) => {
+            if (e.target === challengeModal) {
+                closeChallengeModal();
+            }
+        });
 
-    document.getElementById("retoCard").innerHTML=`
-        <h3>🍻 Shot bebido</h3>
-        <p>Reto completado</p>
-    `;
-}
-</script>
-
+        truthDareModal.addEventListener('click', (e) => {
+            if (e.target === truthDareModal) {
+                closeTruthDareModal();
+            }
+        });
+        
+        // Configurar toggles de ajustes
+        soundToggle.addEventListener('change', () => {
+            soundEnabled = soundToggle.checked;
+            console.log("Sonido:", soundEnabled ? "Activado" : "Desactivado");
+        });
+        
+        vibrationToggle.addEventListener('change', () => {
+            vibrationEnabled = vibrationToggle.checked;
+            console.log("Vibración:", vibrationEnabled ? "Activada" : "Desactivada");
+        });
+        
+        // Asignar eventos a los botones de ajustes
+        resetAppBtn.addEventListener('click', resetApp);
+        editNamesBtn.addEventListener('click', editNames);
+        
+        // Inicializar la app
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verificar si hay nombres guardados
+            const player1 = localStorage.getItem('modo_player1');
+            const player2 = localStorage.getItem('modo_player2');
+            
+            if (player1 && player2) {
+                console.log(`Jugadores: ${player1} y ${player2}`);
+            }
+            
+            // Añadir efecto de carga inicial
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
 </body>
 </html>
