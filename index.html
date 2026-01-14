@@ -1,528 +1,270 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador de Abarrotes</title>
-    <style>
-        :root {
-            --primary: #4CAF50;
-            --primary-dark: #388E3C;
-            --secondary: #FF9800;
-            --light: #f5f5f5;
-            --dark: #212121;
-            --gray: #757575;
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 20px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        h1 {
-            font-size: 1.8rem;
-        }
-        
-        .btn {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #F57C00;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 10px;
-        }
-        
-        /* Formulario */
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            display: none;
-        }
-        
-        .form-container.active {
-            display: block;
-        }
-        
-        .form-title {
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        .photo-preview {
-            width: 100%;
-            max-height: 200px;
-            object-fit: contain;
-            background-color: #eee;
-            margin-bottom: 15px;
-            display: none;
-        }
-        
-        /* Galería */
-        .gallery-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .product-card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .product-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        
-        .product-info {
-            padding: 20px;
-        }
-        
-        .product-title {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-            color: var(--dark);
-        }
-        
-        .product-price {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        
-        .product-description {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-        
-        .product-category {
-            display: inline-block;
-            background-color: #E1F5FE;
-            color: #0288D1;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        /* Modal cámara */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-        }
-        
-        .camera-preview {
-            width: 100%;
-            margin-bottom: 20px;
-            background-color: #333;
-        }
-        
-        /* Buscador */
-        .search-container {
-            margin-bottom: 20px;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .gallery-container {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<title>🔥 Retos Atrevidos</title>
+
+<style>
+body {
+    background:#1e1e1e;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:'Segoe UI',sans-serif;
+}
+
+.iphone {
+    width:430px;
+    height:932px;
+    background:#fff;
+    border-radius:45px;
+    box-shadow:0 0 40px rgba(0,0,0,.6);
+    overflow:hidden;
+    position:relative;
+}
+
+.notch {
+    width:200px;
+    height:35px;
+    background:#000;
+    border-radius:0 0 20px 20px;
+    margin:auto;
+}
+
+header {
+    background:linear-gradient(135deg,#ff2f6e,#ff6b81);
+    color:#fff;
+    text-align:center;
+    padding:18px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.screen {
+    padding:20px;
+}
+
+.card {
+    background:#f7f7f7;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.btn {
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    font-size:17px;
+    margin-top:10px;
+    cursor:pointer;
+    color:#fff;
+    background:#ff2f6e;
+}
+
+.btn.shot { background:#2f9e44; }
+.btn.alt { background:#6c63ff; }
+
+.counter {
+    font-size:46px;
+    font-weight:bold;
+    margin:15px 0;
+}
+
+.toggle {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#eee;
+    padding:12px;
+    border-radius:15px;
+    margin-bottom:15px;
+}
+
+footer {
+    position:absolute;
+    bottom:0;
+    width:100%;
+    padding:12px;
+    border-top:1px solid #ddd;
+    background:#fff;
+    text-align:center;
+    font-size:14px;
+}
+</style>
 </head>
+
 <body>
-    <header>
-        <div class="container header-content">
-            <h1>Administrador de Abarrotes</h1>
-            <div class="btn-group">
-                <button id="viewProductsBtn" class="btn btn-primary">Ver Productos</button>
-                <button id="addProductBtn" class="btn">Agregar Producto</button>
-            </div>
+
+<div class="iphone">
+    <div class="notch"></div>
+    <header>🔥 Retos Atrevidos</header>
+
+    <div class="screen">
+
+        <div class="toggle">
+            <span>🥃 Modo Fiesta</span>
+            <input type="checkbox" id="modoFiesta" checked>
         </div>
-    </header>
-    
-    <div class="container">
-        <!-- Formulario de producto -->
-        <div id="formContainer" class="form-container">
-            <h2 class="form-title">Registrar Nuevo Producto</h2>
-            <form id="productForm">
-                <div class="form-group">
-                    <label for="productName">Nombre del producto</label>
-                    <input type="text" id="productName" placeholder="Ej: Arroz" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="productDescription">Descripción</label>
-                    <textarea id="productDescription" placeholder="Descripción detallada del producto"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="productCategory">Categoría</label>
-                    <select id="productCategory" required>
-                        <option value="">Seleccionar categoría</option>
-                        <option value="Alimentos">Alimentos</option>
-                        <option value="Bebidas">Bebidas</option>
-                        <option value="Limpieza">Limpieza</option>
-                        <option value="Otros">Otros</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="productPrice">Precio (en $)</label>
-                    <input type="number" id="productPrice" min="0" step="0.01" placeholder="0.00" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="productStock">Cantidad en stock</label>
-                    <input type="number" id="productStock" min="0" placeholder="0" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Fotografía del producto</label>
-                    <img id="photoPreview" class="photo-preview" alt="Vista previa de la fotografía del producto que se tomará" / src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e47b9243-15ed-4027-817d-95054dd9114a.png">
-                    <div class="btn-group">
-                        <button type="button" id="takePhotoBtn" class="btn">Tomar Foto</button>
-                        <button type="button" id="uploadPhotoBtn" class="btn">Subir Imagen</button>
-                        <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Guardar Producto</button>
-            </form>
+
+        <div class="card">
+            <p><b>🔥 Intensidad:</b> <span id="nivel">1</span></p>
+            <p><b>📜 Retos completados:</b> <span id="total">0</span></p>
         </div>
-        
-        <!-- Buscador -->
-        <div id="searchContainer" class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Buscar productos...">
+
+        <button class="btn" onclick="retoAtrevido()">🔥 Reto Atrevido</button>
+        <button class="btn shot" onclick="retoShot()">🥃 Reto con Shot</button>
+
+        <div class="card" id="retoCard">
+            <p>Presiona un botón para empezar 😈</p>
         </div>
-        
-        <!-- Galería de productos -->
-        <div id="galleryContainer" class="gallery-container">
-            <!-- Aquí se cargarán los productos dinámicamente -->
+
+        <div class="card">
+            <h4>📜 Historial</h4>
+            <div id="historial" style="font-size:13px;max-height:120px;overflow:auto;"></div>
         </div>
+
     </div>
-    
-    <!-- Modal para cámara -->
-    <div id="cameraModal" class="modal">
-        <div class="modal-content">
-            <h2>Tomar Fotografía</h2>
-            <video id="cameraPreview" class="camera-preview" autoplay playsinline></video>
-            <div class="btn-group">
-                <button id="captureBtn" class="btn btn-primary">Capturar</button>
-                <button id="cancelCameraBtn" class="btn">Cancelar</button>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        // Variables globales
-        let products = JSON.parse(localStorage.getItem('products')) || [];
-        let mediaStream = null;
-        
-        // Elementos del DOM
-        const formContainer = document.getElementById('formContainer');
-        const galleryContainer = document.getElementById('galleryContainer');
-        const searchContainer = document.getElementById('searchContainer');
-        const searchInput = document.getElementById('searchInput');
-        const productForm = document.getElementById('productForm');
-        const viewProductsBtn = document.getElementById('viewProductsBtn');
-        const addProductBtn = document.getElementById('addProductBtn');
-        const takePhotoBtn = document.getElementById('takePhotoBtn');
-        const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
-        const fileInput = document.getElementById('fileInput');
-        const photoPreview = document.getElementById('photoPreview');
-        const cameraModal = document.getElementById('cameraModal');
-        const cameraPreview = document.getElementById('cameraPreview');
-        const captureBtn = document.getElementById('captureBtn');
-        const cancelCameraBtn = document.getElementById('cancelCameraBtn');
-        
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProducts();
-            showGallery();
-        });
-        
-        viewProductsBtn.addEventListener('click', showGallery);
-        addProductBtn.addEventListener('click', showForm);
-        takePhotoBtn.addEventListener('click', openCamera);
-        uploadPhotoBtn.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', handleFileUpload);
-        productForm.addEventListener('submit', saveProduct);
-        searchInput.addEventListener('input', filterProducts);
-        captureBtn.addEventListener('click', capturePhoto);
-        cancelCameraBtn.addEventListener('click', closeCamera);
-        
-        // Funciones
-        function showGallery() {
-            formContainer.classList.remove('active');
-            searchContainer.style.display = 'block';
-            galleryContainer.style.display = 'grid';
-            
-            viewProductsBtn.classList.add('btn-primary');
-            addProductBtn.classList.remove('btn-primary');
+
+    <footer>
+        Intensidad sube automáticamente 🔥
+    </footer>
+</div>
+
+<script>
+// ================= VOZ =================
+function hablar(texto){
+    speechSynthesis.cancel();
+    const voz=new SpeechSynthesisUtterance(texto);
+    voz.lang="es-ES";
+    speechSynthesis.speak(voz);
+}
+
+// ================= VIBRACIÓN =================
+function vibrar(ms=200){
+    if(navigator.vibrate) navigator.vibrate(ms);
+}
+
+// ================= DATOS =================
+let historial=[];
+let completados=0;
+let intensidad=1;
+let recientes=[];
+
+const retosAtrevidos=[
+"Besa intensamente por 15 segundos",
+"Perrea muy pegado durante 20 segundos",
+"Ojos vendados: recibe un beso donde quiera tu pareja",
+"Baila sensual frente a tu pareja",
+"Beso sin manos por 10 segundos",
+"Perreo por detrás intenso",
+"Ojos vendados: adivina si fue beso o caricia",
+"Beso largo sin hablar después",
+"Baila lento muy pegado",
+"Perreo subiendo intensidad"
+];
+
+const retosShot=[
+"Shot o beso intenso",
+"Shot o perreo por 15 segundos",
+"Shot o ojos vendados + beso sorpresa",
+"Shot o baile sensual",
+"Shot o beso sin manos"
+];
+
+// ================= UTIL =================
+function obtenerReto(lista){
+    let i;
+    do {
+        i=Math.floor(Math.random()*lista.length);
+    } while(recientes.includes(i));
+
+    recientes.push(i);
+    if(recientes.length>3) recientes.shift();
+    return lista[i];
+}
+
+function actualizarStats(){
+    document.getElementById("nivel").innerText=intensidad;
+    document.getElementById("total").innerText=completados;
+}
+
+function guardarHistorial(texto){
+    historial.unshift(texto);
+    document.getElementById("historial").innerHTML=historial.slice(0,10).join("<br>");
+}
+
+// ================= CONTADOR =================
+function contador(segundos){
+    let s=segundos;
+    hablar(`Comienza. ${segundos} segundos`);
+    vibrar();
+
+    const card=document.getElementById("retoCard");
+    const inter=setInterval(()=>{
+        card.innerHTML=`<h3>⏱️</h3><div class="counter">${s}</div>`;
+        hablar(s.toString());
+        s--;
+
+        if(s<0){
+            clearInterval(inter);
+            completados++;
+            if(completados%3===0) intensidad++;
+            actualizarStats();
+            card.innerHTML="<h3>✅ Reto completado</h3>";
+            hablar("Reto completado");
+            vibrar(400);
         }
-        
-        function showForm() {
-            formContainer.classList.add('active');
-            searchContainer.style.display = 'none';
-            galleryContainer.style.display = 'none';
-            
-            addProductBtn.classList.add('btn-primary');
-            viewProductsBtn.classList.remove('btn-primary');
-            
-            // Resetear formulario
-            productForm.reset();
-            photoPreview.src = '';
-            photoPreview.style.display = 'none';
-        }
-        
-        async function openCamera() {
-            try {
-                mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-                cameraPreview.srcObject = mediaStream;
-                cameraModal.classList.add('active');
-            } catch (error) {
-                alert('No se pudo acceder a la cámara: ' + error.message);
-                console.error('Error al acceder a la cámara:', error);
-            }
-        }
-        
-        function closeCamera() {
-            if (mediaStream) {
-                mediaStream.getTracks().forEach(track => track.stop());
-                mediaStream = null;
-            }
-            cameraPreview.srcObject = null;
-            cameraModal.classList.remove('active');
-        }
-        
-        function capturePhoto() {
-            const canvas = document.createElement('canvas');
-            canvas.width = cameraPreview.videoWidth;
-            canvas.height = cameraPreview.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(cameraPreview, 0, 0, canvas.width, canvas.height);
-            
-            photoPreview.src = canvas.toDataURL('image/png');
-            photoPreview.style.display = 'block';
-            closeCamera();
-        }
-        
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    photoPreview.src = e.target.result;
-                    photoPreview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert('Por favor selecciona un archivo de imagen válido.');
-            }
-        }
-        
-        function saveProduct(event) {
-            event.preventDefault();
-            
-            const productName = document.getElementById('productName').value;
-            const productDescription = document.getElementById('productDescription').value;
-            const productCategory = document.getElementById('productCategory').value;
-            const productPrice = parseFloat(document.getElementById('productPrice').value);
-            const productStock = parseInt(document.getElementById('productStock').value);
-            const productPhoto = photoPreview.src;
-            
-            if (!productName || !productCategory || isNaN(productPrice) || isNaN(productStock)) {
-                alert('Por favor complete todos los campos requeridos correctamente.');
-                return;
-            }
-            
-            const product = {
-                id: Date.now(),
-                name: productName,
-                description: productDescription,
-                category: productCategory,
-                price: productPrice,
-                stock: productStock,
-                photo: productPhoto || '', // Puede estar vacío si no se subió foto
-                createdAt: new Date().toISOString()
-            };
-            
-            products.push(product);
-            saveToLocalStorage();
-            
-            alert('Producto guardado exitosamente!');
-            productForm.reset();
-            photoPreview.src = '';
-            photoPreview.style.display = 'none';
-            
-            loadProducts();
-            showGallery();
-        }
-        
-        function saveToLocalStorage() {
-            localStorage.setItem('products', JSON.stringify(products));
-        }
-        
-        function loadProducts() {
-            galleryContainer.innerHTML = '';
-            
-            if (products.length === 0) {
-                galleryContainer.innerHTML = '<p>No hay productos registrados todavía. <button class="btn" onclick="showForm()">Agregar producto</button></p>';
-                return;
-            }
-            
-            products.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    <img src="${product.photo || 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c53cede7-92a0-4260-8482-11d3404dc12e.png'}" class="product-image" alt="${product.name}" onerror="this.src='https://placehold.co/300x200?text=Imagen+no+disponible'">
-                    <div class="product-info">
-                        <h3 class="product-title">${product.name}</h3>
-                        <p class="product-price">$${product.price.toFixed(2)}</p>
-                        <p class="product-description">${product.description || 'Sin descripción'}</p>
-                        <span class="product-category">${product.category}</span>
-                    </div>
-                `;
-                galleryContainer.appendChild(productCard);
-            });
-        }
-        
-        function filterProducts() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const productCards = galleryContainer.querySelectorAll('.product-card');
-            
-            productCards.forEach(card => {
-                const title = card.querySelector('.product-title').textContent.toLowerCase();
-                const description = card.querySelector('.product-description').textContent.toLowerCase();
-                
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-    </script>
+    },1000);
+}
+
+// ================= RETOS =================
+function retoAtrevido(){
+    const texto=obtenerReto(retosAtrevidos);
+    guardarHistorial("🔥 "+texto);
+    hablar(texto);
+
+    document.getElementById("retoCard").innerHTML=`
+        <h3>🔥 Reto</h3>
+        <p>${texto}</p>
+        <button class="btn" onclick="contador(${10+intensidad*2})">▶ Iniciar</button>
+    `;
+}
+
+function retoShot(){
+    if(!document.getElementById("modoFiesta").checked){
+        alert("Modo fiesta desactivado");
+        return;
+    }
+
+    const texto=obtenerReto(retosShot);
+    guardarHistorial("🥃 "+texto);
+    hablar(texto);
+
+    document.getElementById("retoCard").innerHTML=`
+        <h3>🥃 Shot</h3>
+        <p>${texto}</p>
+        <button class="btn shot" onclick="shot()">🥃 Shot</button>
+        <button class="btn" onclick="contador(10)">💋 Beso</button>
+    `;
+}
+
+function shot(){
+    completados++;
+    if(completados%3===0) intensidad++;
+    actualizarStats();
+    hablar("Shot bebido. Reto completado");
+    vibrar(500);
+
+    document.getElementById("retoCard").innerHTML=`
+        <h3>🍻 Shot bebido</h3>
+        <p>Reto completado</p>
+    `;
+}
+</script>
+
 </body>
 </html>
-
